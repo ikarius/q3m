@@ -68,6 +68,19 @@ tasks:
     cmds:
       - rm -f {{.BINARY}}
 
+  release:snapshot:
+    desc: Build de release local (sans publier)
+    cmds:
+      - goreleaser release --snapshot --clean
+
+  release:tag:
+    desc: Tag et pousse une release (VERSION=v1.0.0)
+    requires:
+      vars: [VERSION]
+    cmds:
+      - git tag -a {{.VERSION}} -m "Release {{.VERSION}}"
+      - git push github {{.VERSION}}
+
   wordgen:
     desc: Regenere le dictionnaire depuis Lexique383
     cmds:
