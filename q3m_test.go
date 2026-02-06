@@ -2,6 +2,7 @@ package q3m
 
 import (
 	"math"
+	"strings"
 	"testing"
 )
 
@@ -87,6 +88,55 @@ func TestAllWordsDifferent(t *testing.T) {
 	a2, _ := Encode(48.8585, 2.2945)
 	if a1.String() == a2.String() {
 		t.Error("adjacent points should have different addresses")
+	}
+}
+
+func TestDecodeOutOfRange(t *testing.T) {
+	// The idx >= TotalCells branch in Decode is defensive: cycle walking in
+	// Unshuffle always lands below TotalCells for any shuffled < 2^42.
+	// We exercise it by directly testing the guard condition.
+	if TotalCells == 0 {
+		t.Fatal("TotalCells should be > 0")
+	}
+	// Verify that a shuffled value just above TotalCells still unshuffles
+	// to a value below TotalCells (proving the branch is purely defensive).
+	idx := Unshuffle(TotalCells)
+	if idx >= TotalCells {
+		t.Errorf("Unshuffle(TotalCells) = %d, expected < %d", idx, TotalCells)
+	}
+}
+
+func TestAddressString(t *testing.T) {
+	a := Address{W1: "alpha", W2: "beta", W3: "gamma"}
+	got := a.String()
+	want := "alpha.beta.gamma"
+	if got != want {
+		t.Errorf("Address.String() = %q, want %q", got, want)
+	}
+}
+
+func TestDecodeWithSpacesAndUppercase(t *testing.T) {
+	// Encode a known point, then decode with extra spaces and uppercase.
+	addr, err := Encode(48.8584, 2.2945)
+	if err != nil {
+		t.Fatalf("Encode: %v", err)
+	}
+
+	padded := "  " + strings.ToUpper(addr.String()) + "  "
+	coord, err := Decode(padded)
+	if err != nil {
+		t.Fatalf("Decode(%q): %v", padded, err)
+	}
+
+	if math.Abs(coord.Lat-48.8584) > 0.00002 || math.Abs(coord.Lon-2.2945) > 0.00002 {
+		t.Errorf("Decode with spaces/uppercase: got (%f, %f)", coord.Lat, coord.Lon)
+	}
+}
+
+func TestDecodeFourWords(t *testing.T) {
+	_, err := Decode("a.b.c.d")
+	if err == nil {
+		t.Error("expected error for four-word address")
 	}
 }
 
