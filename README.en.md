@@ -1,5 +1,11 @@
 # q3m - 3-word geocoding for metropolitan France
 
+[![CI](https://github.com/ikarius/q3m/actions/workflows/ci.yml/badge.svg)](https://github.com/ikarius/q3m/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/ikarius/q3m)](https://github.com/ikarius/q3m/releases/latest)
+[![License: MPL-2.0](https://img.shields.io/github/license/ikarius/q3m)](LICENSE)
+[![Go Reference](https://pkg.go.dev/badge/github.com/ikarius/q3m.svg)](https://pkg.go.dev/github.com/ikarius/q3m)
+[![Go Report Card](https://goreportcard.com/badge/github.com/ikarius/q3m)](https://goreportcard.com/report/github.com/ikarius/q3m)
+
 **q3m** encodes any GPS position in metropolitan France (including Corsica) into a triplet of three French words, with a precision of **1 metre**.
 
 ```
@@ -88,14 +94,14 @@ fmt.Printf("%.6f, %.6f\n", coord.Lat, coord.Lon)
 
 ```go
 type Coordinate struct {
-    Lat float64
-    Lon float64
+    Lat float64 `json:"lat"`
+    Lon float64 `json:"lon"`
 }
 
 type Address struct {
-    W1 string
-    W2 string
-    W3 string
+    W1 string `json:"w1"`
+    W2 string `json:"w2"`
+    W3 string `json:"w3"`
 }
 ```
 
