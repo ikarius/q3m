@@ -10,7 +10,7 @@ import (
 
 var decodeCmd = &cobra.Command{
 	Use:   "decode <mot1.mot2.mot3>",
-	Short: "Decode une adresse q3m en coordonnees GPS",
+	Short: "Décode une adresse q3m en coordonnées GPS",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		coord, err := q3m.Decode(args[0])

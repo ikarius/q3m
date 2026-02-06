@@ -11,7 +11,7 @@ import (
 
 var encodeCmd = &cobra.Command{
 	Use:   "encode <lat> <lon>",
-	Short: "Encode des coordonnees GPS en adresse q3m",
+	Short: "Encode des coordonnées GPS en adresse q3m",
 	Args:  cobra.ExactArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		lat, err := strconv.ParseFloat(args[0], 64)

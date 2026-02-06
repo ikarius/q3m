@@ -8,7 +8,7 @@ vars:
 
 tasks:
   default:
-    desc: Affiche les taches disponibles
+    desc: Affiche les tâches disponibles
     cmds:
       - task --list-all
 
@@ -34,13 +34,13 @@ tasks:
       - go build -o {{.BINARY}} {{.CMD_PKG}}
 
   run:encode:
-    desc: Encode des coordonnees (LAT=48.8584 LON=2.2945)
+    desc: Encode des coordonnées (LAT=48.8584 LON=2.2945)
     deps: [build]
     cmds:
       - ./{{.BINARY}} encode {{.LAT}} {{.LON}}
 
   run:decode:
-    desc: Decode une adresse (ADDR=mot1.mot2.mot3)
+    desc: Décode une adresse (ADDR=mot1.mot2.mot3)
     deps: [build]
     requires:
       vars: [ADDR]
@@ -48,7 +48,7 @@ tasks:
       - ./{{.BINARY}} decode {{.ADDR}}
 
   run:info:
-    desc: Affiche les parametres de la grille
+    desc: Affiche les paramètres de la grille
     deps: [build]
     cmds:
       - ./{{.BINARY}} info
@@ -82,6 +82,6 @@ tasks:
       - git push github {{.VERSION}}
 
   wordgen:
-    desc: Regenere le dictionnaire depuis Lexique383
+    desc: Régénère le dictionnaire depuis Lexique383
     cmds:
       - go run ./tools/wordgen/ > words_fr.txt
