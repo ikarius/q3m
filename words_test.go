@@ -44,6 +44,43 @@ func TestDictCapacity(t *testing.T) {
 	}
 }
 
+func TestIndexOfCaseInsensitive(t *testing.T) {
+	loadWords()
+	w := wordsList[0] // first word, e.g. "abandon"
+	upper := ""
+	for _, r := range w {
+		upper += string(r - 32) // ASCII lowercase -> uppercase
+	}
+	idx1, ok1 := IndexOf(w)
+	idx2, ok2 := IndexOf(upper)
+	if !ok1 || !ok2 {
+		t.Fatalf("IndexOf(%q)=%v, IndexOf(%q)=%v", w, ok1, upper, ok2)
+	}
+	if idx1 != idx2 {
+		t.Errorf("IndexOf(%q)=%d != IndexOf(%q)=%d", w, idx1, upper, idx2)
+	}
+}
+
+func TestWordsAreASCII(t *testing.T) {
+	loadWords()
+	for i, w := range wordsList {
+		for _, r := range w {
+			if r < 'a' || r > 'z' {
+				t.Fatalf("word[%d]=%q contains non-ASCII-lowercase rune %q", i, w, r)
+			}
+		}
+	}
+}
+
+func TestWordsLength(t *testing.T) {
+	loadWords()
+	for i, w := range wordsList {
+		if len(w) < 4 || len(w) > 8 {
+			t.Fatalf("word[%d]=%q has length %d, want 4-8", i, w, len(w))
+		}
+	}
+}
+
 func BenchmarkIndexOf(b *testing.B) {
 	loadWords()
 	for i := 0; i < b.N; i++ {
