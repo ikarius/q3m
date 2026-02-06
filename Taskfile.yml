@@ -1,0 +1,74 @@
+version: "3"
+
+vars:
+  BINARY: q3m
+  CMD_PKG: ./cmd/q3m/
+  LAT: 48.8584
+  LON: 2.2945
+
+tasks:
+  default:
+    desc: Affiche les taches disponibles
+    cmds:
+      - task --list-all
+
+  test:
+    desc: Lance tous les tests
+    cmds:
+      - go test ./... -v
+
+  bench:
+    desc: Lance les benchmarks
+    cmds:
+      - go test -bench . -benchmem
+
+  build:
+    desc: Compile le binaire
+    sources:
+      - "*.go"
+      - "cmd/q3m/*.go"
+      - words_fr.txt
+    generates:
+      - "{{.BINARY}}"
+    cmds:
+      - go build -o {{.BINARY}} {{.CMD_PKG}}
+
+  run:encode:
+    desc: Encode des coordonnees (LAT=48.8584 LON=2.2945)
+    deps: [build]
+    cmds:
+      - ./{{.BINARY}} encode {{.LAT}} {{.LON}}
+
+  run:decode:
+    desc: Decode une adresse (ADDR=mot1.mot2.mot3)
+    deps: [build]
+    requires:
+      vars: [ADDR]
+    cmds:
+      - ./{{.BINARY}} decode {{.ADDR}}
+
+  run:info:
+    desc: Affiche les parametres de la grille
+    deps: [build]
+    cmds:
+      - ./{{.BINARY}} info
+
+  roundtrip:
+    desc: Test aller-retour encode/decode (LAT=48.8584 LON=2.2945)
+    deps: [build]
+    cmds:
+      - |
+        ADDR=$(./{{.BINARY}} encode {{.LAT}} {{.LON}})
+        echo "encode: {{.LAT}}, {{.LON}} -> $ADDR"
+        COORD=$(./{{.BINARY}} decode "$ADDR")
+        echo "decode: $ADDR -> $COORD"
+
+  clean:
+    desc: Supprime le binaire
+    cmds:
+      - rm -f {{.BINARY}}
+
+  wordgen:
+    desc: Regenere le dictionnaire depuis Lexique383
+    cmds:
+      - go run ./tools/wordgen/ > words_fr.txt
