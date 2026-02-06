@@ -26,7 +26,6 @@ import (
 	"sort"
 	"strconv"
 	"strings"
-	"unicode"
 )
 
 const (
@@ -55,16 +54,6 @@ func isASCIILower(s string) bool {
 		}
 	}
 	return true
-}
-
-// hasAccent checks if a string has characters with diacritical marks.
-func hasAccent(s string) bool {
-	for _, r := range s {
-		if r > unicode.MaxASCII {
-			return true
-		}
-	}
-	return false
 }
 
 type entry struct {
@@ -131,9 +120,6 @@ func main() {
 		homophStr := strings.TrimSpace(record[colIdx["nbhomoph"]])
 		isLemStr := strings.TrimSpace(record[colIdx["islem"]])
 
-		_ = isLemStr // used for priority, not filtering
-		_ = lemme    // used for priority, not filtering
-
 		// Only nouns, adjectives, infinitive verbs, adverbs.
 		switch cgram {
 		case "NOM", "ADJ", "VER", "ADV":
@@ -148,7 +134,7 @@ func main() {
 		}
 
 		// ASCII only, no accents.
-		if hasAccent(ortho) || !isASCIILower(ortho) {
+		if !isASCIILower(ortho) {
 			continue
 		}
 

@@ -3,21 +3,10 @@ package q3m
 import "math"
 
 // GRS80 ellipsoid constants (identical to WGS84 for practical purposes).
-const (
-	grs80A = 6378137.0            // semi-major axis (m)
-	grs80F = 1.0 / 298.257222101 // flattening
-	grs80E = 0.0818191910428158  // first eccentricity
-)
+const grs80E = 0.0818191910428158 // first eccentricity
 
 // Lambert93 projection constants.
-const (
-	lambert93Phi0    = 46.5 * math.Pi / 180 // latitude of origin
-	lambert93Lambda0 = 3.0 * math.Pi / 180  // central meridian
-	lambert93Phi1    = 44.0 * math.Pi / 180 // first standard parallel
-	lambert93Phi2    = 49.0 * math.Pi / 180 // second standard parallel
-	lambert93X0      = 700000.0             // false easting
-	lambert93Y0      = 6600000.0            // false northing
-)
+const lambert93Lambda0 = 3.0 * math.Pi / 180 // central meridian
 
 // Derived constants (precomputed).
 const (

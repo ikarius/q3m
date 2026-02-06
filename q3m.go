@@ -23,8 +23,8 @@ func (a Address) String() string {
 	return a.W1 + "." + a.W2 + "." + a.W3
 }
 
-// W is the dictionary size, used for base conversion.
-const W = uint64(DictSize)
+// w is the dictionary size, used for base conversion.
+const w = uint64(DictSize)
 
 // Encode converts WGS84 coordinates to a q3m three-word address.
 func Encode(lat, lon float64) (Address, error) {
@@ -37,9 +37,9 @@ func Encode(lat, lon float64) (Address, error) {
 
 	shuffled := Shuffle(idx)
 
-	w1 := int(shuffled / (W * W))
-	w2 := int((shuffled / W) % W)
-	w3 := int(shuffled % W)
+	w1 := int(shuffled / (w * w))
+	w2 := int((shuffled / w) % w)
+	w3 := int(shuffled % w)
 
 	return Address{
 		W1: WordAt(w1),
@@ -56,21 +56,16 @@ func Decode(address string) (Coordinate, error) {
 		return Coordinate{}, fmt.Errorf("q3m: invalid address format %q (expected w1.w2.w3)", address)
 	}
 
-	i1, ok1 := IndexOf(parts[0])
-	i2, ok2 := IndexOf(parts[1])
-	i3, ok3 := IndexOf(parts[2])
-
-	if !ok1 {
-		return Coordinate{}, fmt.Errorf("q3m: unknown word %q", parts[0])
-	}
-	if !ok2 {
-		return Coordinate{}, fmt.Errorf("q3m: unknown word %q", parts[1])
-	}
-	if !ok3 {
-		return Coordinate{}, fmt.Errorf("q3m: unknown word %q", parts[2])
+	var indices [3]uint64
+	for i, p := range parts {
+		idx, ok := IndexOf(p)
+		if !ok {
+			return Coordinate{}, fmt.Errorf("q3m: unknown word %q", p)
+		}
+		indices[i] = uint64(idx)
 	}
 
-	shuffled := uint64(i1)*W*W + uint64(i2)*W + uint64(i3)
+	shuffled := indices[0]*w*w + indices[1]*w + indices[2]
 	idx := Unshuffle(shuffled)
 
 	if idx >= TotalCells {
