@@ -197,7 +197,9 @@ q3m/
 
 ## Licence
 
-[A definir]
+Ce projet est distribue sous licence [Mozilla Public License 2.0](LICENSE).
+
+Le dictionnaire (`words_fr.txt`) est derive de Lexique383, distribue sous [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
 
 ## Credits
 

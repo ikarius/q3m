@@ -197,7 +197,9 @@ q3m/
 
 ## Licence
 
-[TBD]
+This project is licensed under the [Mozilla Public License 2.0](LICENSE).
+
+The dictionary (`words_fr.txt`) is derived from Lexique383, distributed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
 
 ## Credits
 
