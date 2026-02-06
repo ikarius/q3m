@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"strconv"
@@ -32,8 +33,22 @@ var encodeCmd = &cobra.Command{
 		}
 
 		if jsonOutput {
-			fmt.Printf(`{"address":"%s","w1":"%s","w2":"%s","w3":"%s","lat":%f,"lon":%f}`+"\n",
-				addr, addr.W1, addr.W2, addr.W3, lat, lon)
+			out := struct {
+				Address string  `json:"address"`
+				W1      string  `json:"w1"`
+				W2      string  `json:"w2"`
+				W3      string  `json:"w3"`
+				Lat     float64 `json:"lat"`
+				Lon     float64 `json:"lon"`
+			}{
+				Address: addr.String(),
+				W1:      addr.W1,
+				W2:      addr.W2,
+				W3:      addr.W3,
+				Lat:     lat,
+				Lon:     lon,
+			}
+			json.NewEncoder(os.Stdout).Encode(out)
 		} else {
 			fmt.Println(addr)
 		}

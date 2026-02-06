@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"os"
 
 	"github.com/ikarius/q3m"
 	"github.com/spf13/cobra"
@@ -12,9 +14,30 @@ var infoCmd = &cobra.Command{
 	Short: "Affiche les paramètres de la grille q3m",
 	Run: func(cmd *cobra.Command, args []string) {
 		if jsonOutput {
-			fmt.Printf(`{"projection":"Lambert93/EPSG:2154","emin":%d,"emax":%d,"nmin":%d,"nmax":%d,"grid_width":%d,"grid_height":%d,"total_cells":%d,"dict_size":%d,"precision":"1m x 1m"}`+"\n",
-				int(q3m.EMin), int(q3m.EMax), int(q3m.NMin), int(q3m.NMax),
-				q3m.GridWidth, q3m.GridHeight, q3m.TotalCells, q3m.DictSize)
+			out := struct {
+				Projection string `json:"projection"`
+				EMin       int    `json:"emin"`
+				EMax       int    `json:"emax"`
+				NMin       int    `json:"nmin"`
+				NMax       int    `json:"nmax"`
+				GridWidth  uint64 `json:"grid_width"`
+				GridHeight uint64 `json:"grid_height"`
+				TotalCells uint64 `json:"total_cells"`
+				DictSize   int    `json:"dict_size"`
+				Precision  string `json:"precision"`
+			}{
+				Projection: "Lambert93/EPSG:2154",
+				EMin:       int(q3m.EMin),
+				EMax:       int(q3m.EMax),
+				NMin:       int(q3m.NMin),
+				NMax:       int(q3m.NMax),
+				GridWidth:  q3m.GridWidth,
+				GridHeight: q3m.GridHeight,
+				TotalCells: q3m.TotalCells,
+				DictSize:   q3m.DictSize,
+				Precision:  "1m x 1m",
+			}
+			json.NewEncoder(os.Stdout).Encode(out)
 		} else {
 			fmt.Println("q3m - géocodage en 3 mots")
 			fmt.Println()
