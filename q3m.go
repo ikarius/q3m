@@ -7,15 +7,15 @@ import (
 
 // Coordinate represents a WGS84 position.
 type Coordinate struct {
-	Lat float64
-	Lon float64
+	Lat float64 `json:"lat"`
+	Lon float64 `json:"lon"`
 }
 
 // Address represents a q3m three-word address.
 type Address struct {
-	W1 string
-	W2 string
-	W3 string
+	W1 string `json:"w1"`
+	W2 string `json:"w2"`
+	W3 string `json:"w3"`
 }
 
 // String returns the dotted representation "w1.w2.w3".

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 
@@ -20,8 +21,16 @@ var decodeCmd = &cobra.Command{
 		}
 
 		if jsonOutput {
-			fmt.Printf(`{"lat":%.6f,"lon":%.6f,"address":"%s"}`+"\n",
-				coord.Lat, coord.Lon, args[0])
+			out := struct {
+				Lat     float64 `json:"lat"`
+				Lon     float64 `json:"lon"`
+				Address string  `json:"address"`
+			}{
+				Lat:     coord.Lat,
+				Lon:     coord.Lon,
+				Address: args[0],
+			}
+			json.NewEncoder(os.Stdout).Encode(out)
 		} else {
 			fmt.Printf("%.6f, %.6f\n", coord.Lat, coord.Lon)
 		}
