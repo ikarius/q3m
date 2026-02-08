@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 	"strconv"
@@ -48,7 +47,7 @@ var encodeCmd = &cobra.Command{
 				Lat:     lat,
 				Lon:     lon,
 			}
-			json.NewEncoder(os.Stdout).Encode(out)
+			writeJSON(out)
 		} else {
 			fmt.Println(addr)
 		}

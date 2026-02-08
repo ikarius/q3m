@@ -1,9 +1,7 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"os"
 
 	"github.com/ikarius/q3m"
 	"github.com/spf13/cobra"
@@ -37,7 +35,7 @@ var infoCmd = &cobra.Command{
 				DictSize:   q3m.DictSize,
 				Precision:  "1m x 1m",
 			}
-			json.NewEncoder(os.Stdout).Encode(out)
+			writeJSON(out)
 		} else {
 			fmt.Println("q3m - géocodage en 3 mots")
 			fmt.Println()

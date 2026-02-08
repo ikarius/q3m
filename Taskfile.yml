@@ -31,7 +31,10 @@ tasks:
     generates:
       - "{{.BINARY}}"
     cmds:
-      - go build -o {{.BINARY}} {{.CMD_PKG}}
+      - go build -ldflags "-X main.version={{.VERSION}}" -o {{.BINARY}} {{.CMD_PKG}}
+    vars:
+      VERSION:
+        sh: git describe --tags --always --dirty 2>/dev/null || echo dev
 
   run:encode:
     desc: Encode des coordonnées (LAT=48.8584 LON=2.2945)
