@@ -55,6 +55,20 @@ q3m decode province.shootons.retirons
 q3m info
 ```
 
+### Convertir WGS84 → Lambert93
+
+```bash
+q3m tolam 48.8584 2.2945
+# 648237.3015, 6862271.6816
+```
+
+### Convertir Lambert93 → WGS84
+
+```bash
+q3m fromlam 648237.3015 6862271.6816
+# 48.858400, 2.294500
+```
+
 ### Sortie JSON
 
 Toutes les commandes acceptent le flag `--json` :
@@ -65,6 +79,12 @@ q3m encode 48.8584 2.2945 --json
 
 q3m decode province.shootons.retirons --json
 # {"lat":48.858398,"lon":2.294503,"address":"province.shootons.retirons"}
+
+q3m tolam 48.8584 2.2945 --json
+# {"e":648237.3015,"n":6862271.6816,"lat":48.8584,"lon":2.2945}
+
+q3m fromlam 648237.3015 6862271.6816 --json
+# {"lat":48.858400,"lon":2.294500,"e":648237.3015,"n":6862271.6816}
 ```
 
 ## Utilisation comme bibliothèque Go
@@ -190,7 +210,9 @@ q3m/
 │   ├── main.go            # Point d'entrée CLI (Cobra)
 │   ├── encode.go          # Sous-commande encode
 │   ├── decode.go          # Sous-commande decode
-│   └── info.go            # Sous-commande info
+│   ├── info.go            # Sous-commande info
+│   ├── tolam.go           # Sous-commande tolam (WGS84 → Lambert93)
+│   └── fromlam.go         # Sous-commande fromlam (Lambert93 → WGS84)
 └── tools/wordgen/
     └── main.go            # Génération du dictionnaire (Lexique383)
 ```
